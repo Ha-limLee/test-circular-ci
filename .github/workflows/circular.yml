@@ -1,0 +1,23 @@
+# Workflow name
+name: 'detect circular dependency'
+
+# Event for the workflow
+on: [pull_request]
+
+# List of jobs
+jobs:
+  storybook:
+    # Operating System
+    runs-on: ubuntu-latest
+    # Job steps
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: yarn
+      - name: run dpdm
+        run: yarn dpdm -T --no-tree --no-warning --skip-dynamic-imports circular --exit-code circular:1 ./src/index.tsx
